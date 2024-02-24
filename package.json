@@ -14,7 +14,7 @@
     "expo-camera": "~14.0.5"
   },
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "scripts": {
     "start": "node server.js"
