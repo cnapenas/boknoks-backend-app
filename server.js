@@ -129,18 +129,6 @@ const cors = require("cors");
 
   
 
-    router.get("/", (req, resp) => {
-
-        //resp.send("App is Working");
-        console.log("OST request received");
-        res.json({ message: "POST request received" });
-        
-        // You can check backend is working or not by 
-        // entering http://loacalhost:5000
-        
-        // If you see App is working means
-        // backend working properly
-    });
 
 
 
