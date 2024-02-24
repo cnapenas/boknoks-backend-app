@@ -456,4 +456,4 @@ const cors = require("cors");
     app.listen(port, () => {
         console.log("App listen at port " + port);
     });
-module.exports = { app };
+export default app;
