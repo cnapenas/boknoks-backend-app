@@ -453,7 +453,7 @@ const cors = require("cors");
     });
 
     app.get('/render', function(req, res) {
-        res.render('index', {title: 'res vs app render'})
+        res.render('server', {title: 'res vs app render'})
     })
 
     app.listen(port, () => {
