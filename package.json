@@ -1,0 +1,19 @@
+{
+  "name": "node-api",
+  "main": "db.js",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "*",
+    "cors": "^2.8.5",
+    "expo": "^50.0.7",
+    "express": "*",
+    "express-session": "^1.18.0",
+    "mongoose": "^5.7.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "expo-camera": "~14.0.5"
+  },
+  "scripts": {
+    "start": "node database/server.js"
+  }
+}
