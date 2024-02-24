@@ -1,4 +1,5 @@
 // Purpose: Add new product to database
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const mongoose = require('./db');
 const passport = require('passport');
@@ -89,9 +90,7 @@ const cors = require("cors");
     // 1. Use CORS middleware
     // app.use(cors());
     app.use(cors({
-        //  origin: 'http://localhost:3000',
-        // origin: 'https://boknoks-nxsiy.mongodbstitch.com',
-         origin: 'https://boknokssystem.onrender.com',
+          origin: process.env.CLIENT_URL,
         credentials: true
     }));
 
@@ -126,7 +125,7 @@ const cors = require("cors");
     var router = express.Router();
     app.use(router);
 
-    var port =  3000;
+    var port =  process.env.DB_PORT || 3000;
 
   
 

@@ -6,6 +6,7 @@
     "body-parser": "*",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "expo": "^50.0.7",
     "expo-camera": "~14.0.5",
     "express": "*",
