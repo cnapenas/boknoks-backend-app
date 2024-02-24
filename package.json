@@ -13,6 +13,9 @@
     "passport-local": "^1.0.0",
     "expo-camera": "~14.0.5"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node database/server.js"
   }
