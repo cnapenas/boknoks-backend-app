@@ -2,10 +2,11 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('./db');
 const passport = require('passport');
-const session = require('cookie-session');
 const express = require('express');
+const session = require('express-session');
 var bodyParser = require('body-parser');
 const cors = require("cors");
+
 
 
 // Schema for users of app
@@ -103,6 +104,8 @@ const cors = require("cors");
         resave: false,
         saveUninitialized: false,
     }));
+
+ 
 
     // 4. Initialize Passport
     app.use(passport.initialize());
@@ -453,4 +456,4 @@ const cors = require("cors");
     app.listen(port, () => {
         console.log("App listen at port " + port);
     });
-module.exports = { Product,User, app };
+module.exports = { app };

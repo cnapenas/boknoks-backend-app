@@ -2,13 +2,13 @@
   {
     "version": 2,
     "builds": [{
-      "src": "./db.js",
+      "src": "./server.js",
       "use": "@vercel/node"
     }],
     "routes": [{"handle": "filesystem"},
       {
         "src": "/.*",
-        "dest": "db.js"
+        "dest": "server.js"
       }
     ]
   }
