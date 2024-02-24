@@ -89,9 +89,9 @@ const cors = require("cors");
     // 1. Use CORS middleware
     // app.use(cors());
     app.use(cors({
-         origin: 'http://localhost:3000',
+        //  origin: 'http://localhost:3000',
         // origin: 'https://boknoks-nxsiy.mongodbstitch.com',
-        // origin: 'https://boknokssystem.onrender.com',
+         origin: 'https://boknokssystem.onrender.com',
         credentials: true
     }));
 
