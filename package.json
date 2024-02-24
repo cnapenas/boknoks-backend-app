@@ -1,6 +1,6 @@
 {
   "name": "node-api",
-  "main": "server.js",
+  "main": "db.js",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "*",
