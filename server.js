@@ -15,24 +15,34 @@ const cors = require("cors");
 
         productCode: {
             type: String,
-            required: true,
+            required: true
         },
 
         productName: {
             type: String,
-            required: true,
+            required: true
         },
         productQty: {
             type: Number,
             required: true,
-            default: 0,
+            default: 0
             
         },
         productPrice: {
             type: Number,
             required: true,
-            default: 0,
+            default: 0
         },
+        transactionDate: {
+            type: Date,
+            default: Date.now,
+            required: true
+        },
+        transactionType: {
+            type: String,
+            required: true
+        }
+
     });
     const Product = mongoose.model('products', ProductSchema);
     Product.createIndexes();
@@ -134,6 +144,8 @@ const cors = require("cors");
 
     app.post("/addnewproduct", async (req, resp) => {
         try {
+            
+            
             const prod = new Product(req.body);
             let result = await prod.save();
             result = result.toObject();
@@ -287,7 +299,7 @@ const cors = require("cors");
     app.delete("/deleteProduct/:pCode", async (req, res) => {
         try {
             const productCode = req.params.pCode;
-        
+            console.log(productCode);
             let result  = await Product.findOneAndDelete({ productCode: productCode });
             if (result) {
                 res.send(result);

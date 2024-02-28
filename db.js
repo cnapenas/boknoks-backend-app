@@ -6,7 +6,7 @@
       useNewUrlParser: true,
       useUnifiedTopology: true
   }, err => err ? console.log(err) : 
-      console.log('Connected to ' + process.env.DB_NAME +' database'));
+      console.log('Connected to ' + process.env.DB_NAME +' 00database'));
 
   module.exports = mongoose;
 
