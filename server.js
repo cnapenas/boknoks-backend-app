@@ -7,10 +7,11 @@ const express = require('express');
 const session = require('express-session');
 var bodyParser = require('body-parser');
 const cors = require("cors");
+const uuid = require('uuid');
 
 
 
-// Schema for users of app
+// Schema for products of app
     const ProductSchema = new mongoose.Schema({
 
         productCode: {
@@ -94,6 +95,41 @@ const cors = require("cors");
     }
     ));
 
+    const TransactionSchema = new mongoose.Schema({
+
+        transactionID: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true
+        },
+
+        product: ProductSchema, // Embed the ProductSchema here
+  
+
+        transactDate: {
+            type: Date,
+            default: Date.now,
+            required: true
+        },
+        transactType: {
+            type: String,
+            required: true
+        }
+
+    });
+
+    TransactionSchema.pre('validate', function(next) {
+        if (!this.transactionID) {
+          this.transactionID = uuid.v4();
+        }
+        next();
+      });
+
+    const Transaction = mongoose.model('transaction', TransactionSchema);
+    Transaction.createIndexes();
+    
+
 
     const app = express();
 
@@ -154,6 +190,45 @@ const cors = require("cors");
                 console.log(result);
             } else {
                 console.log("Product already register");
+            }
+            
+            
+
+        } catch (e) {
+            console.log(e);
+            resp.send("Something Went Wrong");
+        }
+    });
+
+    app.post("/addtransaction", async (req, resp) => {
+        try {
+            
+            
+            const prod = {
+                productCode: req.body.productCode,
+                productName: req.body.productName,
+                productQty: req.body.productQty,
+                productPrice: req.body.productPrice,
+                transactionDate: req.body.transactionDate,
+                transactionType: req.body.transactionType
+              };
+
+            
+
+            const transaction = new Transaction({
+                product: prod, // Assign the product details here
+                transactDate: req.body.transactDate,
+                transactType: req.body.transactType
+            });
+
+            let result = await transaction.save();
+            result = result.toObject();
+            if (result) {
+                console.log("added transaction successfully!");
+                resp.send(req.body);
+                console.log(result);
+            } else {
+                console.log("error in adding transaction!");
             }
             
             
