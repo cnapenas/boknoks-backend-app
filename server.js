@@ -57,6 +57,10 @@ const uuid = require('uuid');
         password: {
         type: String,
         required: true
+        },
+        userType: {
+        type: String,
+        required: true
         }
     });
 
@@ -113,6 +117,10 @@ const uuid = require('uuid');
             required: true
         },
         transactType: {
+            type: String,
+            required: true
+        },
+        transactUser: {
             type: String,
             required: true
         }
@@ -218,7 +226,8 @@ const uuid = require('uuid');
             const transaction = new Transaction({
                 product: prod, // Assign the product details here
                 transactDate: req.body.transactDate,
-                transactType: req.body.transactType
+                transactType: req.body.transactType,
+                transactUser: req.body.transactUser
             });
 
             let result = await transaction.save();
@@ -294,6 +303,36 @@ const uuid = require('uuid');
                 }
                 else {
                     res.send("No products found");
+                }
+            }
+        });
+    });
+
+    app.get("/getSalesForDate/:tDate/:tType", function (req, res) {   
+        const date = new Date(req.params.tDate);
+        const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        const transactType = req.params.tType;
+
+        console.log(startOfDay);
+        console.log(endOfDay);
+        console.log(transactType);
+    
+        Transaction.find({
+            transactDate: {
+                $gte: startOfDay,
+                $lt: endOfDay
+            },
+            transactType: transactType
+        }, function (err, allTransactions) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (allTransactions.length > 0) {
+                    console.log("Transactions found");
+                    res.send(allTransactions);
+                } else {
+                    res.send(allTransactions);
                 }
             }
         });
@@ -434,11 +473,12 @@ const uuid = require('uuid');
 
     app.post("/register", async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password , userType} = req.body;
 
         // Check if user already exists
         console.log(username);
         console.log(password);
+        console.log(userType);
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
@@ -507,7 +547,7 @@ const uuid = require('uuid');
                 req.login(user, (error) => {
                     if (error) return next(error);
                     // + req.user.username
-                    res.status(200).json({ message: 'User authenticated successfully', user: req.user.username });
+                    res.status(200).json({ message: 'User authenticated successfully', user: req.user});
                 });
             } catch (error) {
                 return next(error);
