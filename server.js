@@ -364,7 +364,7 @@ const uuid = require('uuid');
 
         if (productCode === "empty" && productName != "empty") {
             console.log("Product Code Empty");
-            Product.find({ productName: productName }, function (err, product) {
+            Product.find({ productName: { $regex: productName, $options: 'i' } }, function (err, product) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -381,7 +381,7 @@ const uuid = require('uuid');
         else if (productName === "empty" && productCode!= "empty") 
         {
             console.log("Product name Empty");
-            Product.find({ productCode: productCode }, function (err, product) {
+            Product.find({ productCode: { $regex: productCode, $options: 'i' } }, function (err, product) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -404,8 +404,8 @@ const uuid = require('uuid');
             console.log("Product Code and Product Name not Empty");
             Product.find({
                 $or: [
-                    { productCode: productCode },
-                    { productName: productName }
+                    { productCode: { $regex: productCode, $options: 'i' } },
+                    { productName: { $regex: productName, $options: 'i' } }
                 ]
             }, function (err, allProducts) {
                 if (err) {
