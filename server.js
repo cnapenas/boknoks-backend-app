@@ -61,7 +61,14 @@ const uuid = require('uuid');
         userType: {
         type: String,
         required: true
+        },
+
+        userRegCode: {
+            type: String,
+            required: true,
+            unique: true
         }
+
     });
 
     UserSchema.pre('save', async function(next) {
@@ -136,6 +143,18 @@ const uuid = require('uuid');
 
     const Transaction = mongoose.model('transaction', TransactionSchema);
     Transaction.createIndexes();
+
+    const RegCodeSchema = new mongoose.Schema({ 
+        userRegCode: {
+            type: String,
+            required: true,
+            unique: true
+        }
+    });
+
+    const RegCode = mongoose.model('regcodes', RegCodeSchema);
+   
+
     
 
 
@@ -473,16 +492,32 @@ const uuid = require('uuid');
 
     app.post("/register", async (req, res) => {
     try {
-        const { username, password , userType} = req.body;
+        const { username, password , userType, userRegCode} = req.body;
 
         // Check if user already exists
-        console.log(username);
-        console.log(password);
-        console.log(userType);
+        // console.log(username);
+        // console.log(password);
+        // console.log(userType);
+        // console.log(userRegCode);
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
+
+        const validRegCode = await RegCode.findOne({userRegCode});
+        if (!validRegCode) {
+            return res.status(400).json({ message: 'Invalid registration code' });
+        }
+        else
+        {
+            console.log("Valid registration code");
+            const existingRegCode = await User.findOne({ userRegCode });
+            if (existingRegCode) {
+                return res.status(400).json({ message: 'User registration code already exists' });
+            }
+        }
+
+
 
         //Create new user
         async function saveUser() {
