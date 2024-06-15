@@ -97,11 +97,19 @@ const uuid = require('uuid');
 
     passport.use(new LocalStrategy(
     function(username, password, done) {
-        User.findOne({ username: username }, function (err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false); }
-        if (!user.validPassword(password)) { return done(null, false); }
-        return done(null, user);
+        User.findOne({ username: username })
+        .exec()
+        .then(user => {
+            if (!user) {
+                return done(null, false);
+            }
+            if (!user.validPassword(password)) {
+                return done(null, false);
+            }
+            return done(null, user);
+        })
+        .catch(err => {
+            return done(err);
         });
     }
     ));
@@ -273,7 +281,8 @@ const uuid = require('uuid');
             const productQty = req.body.productQty;
 
         
-            
+            console.log("PProduct code is " + productCode);
+            console.log("Product qty is " + productQty);
             let result  = await Product
                 .findOneAndUpdate({ productCode: productCode }, { productQty: productQty } ,{ new: true });
             if (result) {
@@ -310,20 +319,18 @@ const uuid = require('uuid');
 
     app.get("/getProducts", function (req, res) 
     {   
-        Product.find({}, function (err, allProducts) {
-            if (err) {
-                console.log(err);
+        Product.find({})
+        .exec()
+        .then(allProducts => {
+            if (allProducts) {
+                console.log("Products found");
+                res.send(allProducts);
             } else {
-                //res.render("home", { details: allDetails })
-                if (allProducts) {
-                    
-                    console.log("Products found");
-                    res.send(allProducts);
-                }
-                else {
-                    res.send("No products found");
-                }
+                res.send("No products found");
             }
+        })
+        .catch(err => {
+            console.log(err);
         });
     });
 
@@ -343,17 +350,16 @@ const uuid = require('uuid');
                 $lt: endOfDay
             },
             transactType: transactType
-        }, function (err, allTransactions) {
-            if (err) {
-                console.log(err);
-            } else {
-                if (allTransactions.length > 0) {
-                    console.log("Transactions found");
-                    res.send(allTransactions);
-                } else {
-                    res.send(allTransactions);
-                }
+        })
+        .exec()
+        .then(allTransactions => {
+            if (allTransactions.length > 0) {
+                console.log("Transactions found");
             }
+            res.send(allTransactions);
+        })
+        .catch(err => {
+            console.log(err);
         });
     });
 
@@ -364,35 +370,38 @@ const uuid = require('uuid');
 
         if (productCode === "empty" && productName != "empty") {
             console.log("Product Code Empty");
-            Product.find({ productName: { $regex: productName, $options: 'i' } }, function (err, product) {
-                if (err) {
-                    console.log(err);
+            Product.find({ productName: { $regex: productName, $options: 'i' } })
+            .exec()
+            .then(product => {
+                if (product && product.length > 0) {
+                    console.log("Product found");
+                    console.log(product);
+                    res.send(product);
                 } else {
-                    if (product && product.length > 0) {
-                        console.log("Product found");
-                        console.log(product);
-                        res.send(product);
-                    } else {
-                        res.send("No product found with the given product code");
-                    }
+                    res.send("No product found with the given product code");
                 }
+            })
+            .catch(err => {
+                console.log(err);
             });
+            
         }
         else if (productName === "empty" && productCode!= "empty") 
         {
             console.log("Product name Empty");
-            Product.find({ productCode: { $regex: productCode, $options: 'i' } }, function (err, product) {
-                if (err) {
-                    console.log(err);
+            Product.find({ productCode: { $regex: productCode, $options: 'i' } })
+            .exec()
+            .then(product => {
+                if (product && product.length > 0) {
+                    console.log("Product found");
+                    console.log(product);
+                    res.send(product);
                 } else {
-                    if (product && product.length > 0) {
-                        console.log("Product found");
-                        console.log(product);
-                        res.send(product);
-                    } else {
-                        res.send("No product found with the given product code");
-                    }
+                    res.send("No product found with the given product code");
                 }
+            })
+            .catch(err => {
+                console.log(err);
             });
         }
         else if (productName === "empty" && productCode === "empty") {
@@ -407,21 +416,19 @@ const uuid = require('uuid');
                     { productCode: { $regex: productCode, $options: 'i' } },
                     { productName: { $regex: productName, $options: 'i' } }
                 ]
-            }, function (err, allProducts) {
-                if (err) {
-                    console.log(err);
+            })
+            .exec()
+            .then(allProducts => {
+                if (allProducts) {
+                    console.log("Products found");
+                    console.log(allProducts);
+                    res.send(allProducts);
                 } else {
-                    //res.render("home", { details: allDetails })
-                    if (allProducts) {
-                        
-                        console.log("Products found");
-                        console.log(allProducts);
-                        res.send(allProducts);
-                    }
-                    else {
-                        res.send("No products found");
-                    }
+                    res.send("No products found");
                 }
+            })
+            .catch(err => {
+                console.log(err);
             });
         }
         

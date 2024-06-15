@@ -11,7 +11,7 @@
     "expo-camera": "~14.0.5",
     "express": "*",
     "express-session": "^1.18.0",
-    "mongoose": "^5.7.0",
+    "mongoose": "^8.4.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "uuid": "^9.0.1"
