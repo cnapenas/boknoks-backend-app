@@ -502,16 +502,12 @@ const uuid = require('uuid');
         const { username, password , userType, userRegCode} = req.body;
 
         // Check if user already exists
-        console.log(username);
-        console.log(password);
-        console.log(userType);
-        console.log(userRegCode);
+      
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
-        const allRegCodes = await RegCode.find({});
-        console.log(allRegCodes);
+       
         const validRegCode = await RegCode.findOne({userRegCode});
         if (!validRegCode) {
             return res.status(400).json({ message: 'Invalid registration code' });
