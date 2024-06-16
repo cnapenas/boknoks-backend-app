@@ -510,8 +510,9 @@ const uuid = require('uuid');
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
-
-        const validRegCode = await RegCode.findOne({ userRegCode: userRegCode});
+        const allRegCodes = await RegCode.find({});
+        console.log(allRegCodes);
+        const validRegCode = await RegCode.findOne({userRegCode});
         if (!validRegCode) {
             return res.status(400).json({ message: 'Invalid registration code' });
         }
