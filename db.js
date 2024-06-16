@@ -14,7 +14,7 @@ mongoose.connect(`${process.env.DB_CONNECTION_STRING}${process.env.DB_NAME}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .then(() => console.log('Database connected!'))
+  .then(() => console.log('Connected to ' + process.env.DB_NAME +' 00database'))
   .catch(err => console.error('Error:', err));
 
   module.exports = mongoose;
