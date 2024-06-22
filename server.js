@@ -216,15 +216,17 @@ const uuid = require('uuid');
     app.post("/addnewproduct", async (req, resp) => {
         try {
             
-            
-            const prod = new Product(req.body);
-            let result = await prod.save();
-            result = result.toObject();
-            if (result) {
-                resp.send(req.body);
-                console.log(result);
+            const existingProduct = await Product.findOne({ productCode: req.body.productCode });
+
+            if (existingProduct) {
+                console.log("Product already registered");
+                return resp.status(400).json({ message: 'Product Already Registered' });
             } else {
-                console.log("Product already register");
+                const prod = new Product(req.body);
+                let result = await prod.save();
+                result = result.toObject();
+                resp.send(result);
+                console.log(result);
             }
             
             
